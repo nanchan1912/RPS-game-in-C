@@ -1,0 +1,119 @@
+//first code made by nan_chan uwu
+//PLAY rock paper scissors
+//choose how many rounds you want to play
+//say STOP anytime u want to stop playing
+
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<time.h>
+
+typedef struct{
+    int player_score;
+    int computer_score;
+} scores;
+char computer[100];
+
+int return_guy(){
+    srand(time(NULL));   
+    int n = rand()%3;
+    if(n == 2){
+        strcpy(computer, "scissors");
+    }
+     if(n == 0){
+        strcpy(computer, "rock");
+    }
+     if(n == 1){
+        strcpy(computer, "paper");
+    }
+    return n;
+}
+//scissors = 2
+//paper = 1
+//rock = 0
+int player_decider(char* player){
+   if(strcmp(player, "scissors")==0){
+    return 2;
+   }
+
+   if(strcmp(player, "rock")==0){
+    return 0;
+   }
+
+   if(strcmp(player, "paper")==0){
+    return 1;
+   }
+    return 3;
+}
+
+void winner_decider(char* player, scores* score){
+   int p = player_decider(player);
+   int c = return_guy();
+   if( p == c){
+    return;
+   }
+   if((p == 2 && c == 1)||(p == 0 && c == 2)||(p == 1 && c == 0)){
+    score->player_score++;
+    return;
+   }
+    if((c == 2 && p == 1)||(c == 0 && p == 2)||(c == 1 && p == 0)){
+    score->computer_score++;
+    return;
+   }
+}
+
+void print_score(scores score){
+    printf("your score: %d\ncomputer's score: %d\n", score.player_score, score.computer_score);
+    if(score.player_score > score.computer_score){
+        printf("YOU WON!");
+    }
+    if(score.player_score < score.computer_score){
+        printf("YOU LOST!");
+    }
+    if(score.player_score == score.computer_score){
+        printf("TIE");
+    }
+}
+
+int main(){
+    printf("ROCK, PAPER, SCISSORS GAME!\n");
+    printf("how many rounds do u want to play for?\n");
+    int rounds;
+    scanf("%d", &rounds);
+    printf("type out your move to start!\n");
+    char player[100];
+    scores score;
+    scores* score_ptr = &score;
+    score.player_score = 0;
+    score.computer_score = 0;
+    int n;
+    int player_number, computer_number;
+
+
+    for(int i = 0; i<rounds;i++){
+        scanf("%s", player);
+        player_number = player_decider(player);
+         if(strcmp(player, "STOP")==0){
+            print_score(score);
+            break;
+        }
+        if(player_number == 3){
+            printf("please enter either rock, paper or scissors\n");
+            rounds++;
+            continue;
+
+        }
+        // if(strcmp(player, "STOP")==0){
+        //     print_score(score);
+        //     break;
+        // }
+
+        winner_decider(player, score_ptr);
+        printf("the computer played %s and you played %s\n", computer, player);
+    }
+    if(player_number != 3){
+    print_score(score);
+    }
+    return 0;
+}
+
